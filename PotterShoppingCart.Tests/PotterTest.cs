@@ -167,22 +167,28 @@ namespace PotterShoppingCart.Tests
     {
         public decimal CalculatePrice(List<PotterBook> cart)
         {
-            bool is25Percent = cart.GroupBy(c => c.Series).Count() >= 5;
-            if (is25Percent)
-                return (decimal)(cart.Count * 100 * 0.75);
+            Dictionary<int, List<PotterBook>> group =  cart.GroupBy(c => c.Series).ToDictionary(c=>c.Key, c=> c.ToList());
+            int numberOf5Series = 0;
+            if(group.Count >= 5)
+                numberOf5Series = group.Min(g => g.Value.Count);
 
-            bool is20Percent = cart.GroupBy(c => c.Series).Count() >= 4;
-            if(is20Percent)
-                return (decimal)(cart.Count * 100 * 0.80);
+            int numberOf4Series = 0;
+            if(group.Count(g => (g.Value.Count - numberOf5Series > 0)) >= 4)
+                numberOf4Series = group.Min(g => (g.Value.Count - numberOf5Series > 0)? g.Value.Count - numberOf5Series : 0);
+           
+            int numberOf3Series = 0;
+            if(group.Count(g => (g.Value.Count - (numberOf5Series + numberOf4Series) > 0)) >= 3)
+                numberOf3Series = group.Min(g => (g.Value.Count - (numberOf5Series + numberOf4Series) > 0) ? g.Value.Count - (numberOf5Series + numberOf4Series) : 0);
 
-            bool is10Percent = cart.GroupBy(c => c.Series).Count() >= 3;
-            if(is10Percent)
-                return (decimal)(cart.Count * 100 * 0.90);
+            int numberOf2Series = 0;
+            if(group.Count(g => (g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series) > 0)) >= 2)
+            numberOf2Series = group.Min(g => (g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series) > 0) ? g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series) : 0);
 
-            bool is5Percent = cart.GroupBy(c => c.Series).Count() >= 2;
-            if (is5Percent)
-                return (decimal) (cart.Count* 100 *0.95);
-            return cart.Count*100;
+            int numberOf1Series = 0;
+            if(group.Count(g => (g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series + numberOf2Series) > 0)) >= 1)
+                numberOf1Series = group.Sum(g => (g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series + numberOf2Series) > 0) ? g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series +numberOf2Series) : 0);
+
+            return (decimal) (((numberOf5Series * 5 * 0.75) + (numberOf4Series * 4 * 0.8) + (numberOf3Series * 3 * 0.9) + (numberOf2Series * 2 * 0.95) + (numberOf1Series)) * 100);
         }
     }
 
