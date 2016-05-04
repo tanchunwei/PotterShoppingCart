@@ -17,9 +17,22 @@ namespace PotterShoppingCart.Tests
             };
             decimal expected = 100;
             var target = new ShoppingCart();
-            decimal actual = target.calculatePrice(cart);
+            decimal actual = target.CalculatePrice(cart);
 
             Assert.AreEqual(expected, actual);
         }
+    }
+
+    public class ShoppingCart
+    {
+        public decimal CalculatePrice(List<PotterBook> cart)
+        {
+            return 100;
+        }
+    }
+
+    public class PotterBook
+    {
+        public int Series { get; set; }
     }
 }
