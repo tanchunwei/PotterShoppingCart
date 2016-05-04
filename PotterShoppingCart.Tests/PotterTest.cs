@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace PotterShoppingCart.Tests
@@ -65,7 +66,11 @@ namespace PotterShoppingCart.Tests
     {
         public decimal CalculatePrice(List<PotterBook> cart)
         {
-            return cart.Count>=2? 190: 100;
+            bool is5percent = cart.GroupBy(c => c.Series).Count() >= 2;
+
+            if (is5percent)
+                return (decimal) (cart.Count* 100 *0.95);
+            return cart.Count*100;
         }
     }
 
