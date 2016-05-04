@@ -60,6 +60,28 @@ namespace PotterShoppingCart.Tests
 
             Assert.AreEqual(expected, actual);
         }
+
+        [TestMethod]
+        public void CalculatePriceTest_PriceOfThreeDifferentBooks_Get10PercentOff_Is270Dollars()
+        {
+            var cart = new List<PotterBook>()
+            {
+                new PotterBook(){
+                    Series = 1
+                },
+                new PotterBook(){
+                    Series = 2
+                } ,
+                new PotterBook(){
+                    Series = 3
+                } 
+            };
+            decimal expected = 270;
+            var target = new ShoppingCart();
+            decimal actual = target.CalculatePrice(cart);
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 
     public class ShoppingCart
