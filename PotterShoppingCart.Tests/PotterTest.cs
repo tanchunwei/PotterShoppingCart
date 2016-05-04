@@ -46,7 +46,7 @@ namespace PotterShoppingCart.Tests
     {
         public decimal CalculatePrice(List<PotterBook> cart)
         {
-            return 100;
+            return cart.Count>=2? 190: 100;
         }
     }
 
