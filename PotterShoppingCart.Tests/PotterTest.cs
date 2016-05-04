@@ -196,25 +196,30 @@ namespace PotterShoppingCart.Tests
         public decimal CalculatePrice(List<PotterBook> cart)
         {
             Dictionary<int, List<PotterBook>> group =  cart.GroupBy(c => c.Series).ToDictionary(c=>c.Key, c=> c.ToList());
+            int totalSeriesSet = 0;
             int numberOf5Series = 0;
             if(group.Count >= 5)
                 numberOf5Series = group.Min(g => g.Value.Count);
+            totalSeriesSet += numberOf5Series;
 
             int numberOf4Series = 0;
-            if(group.Count(g => (g.Value.Count - numberOf5Series > 0)) >= 4)
-                numberOf4Series = group.Where(g => g.Value.Count - (numberOf5Series) > 0).Min(g => g.Value.Count - (numberOf5Series));
-           
+            if (group.Count(g => (g.Value.Count - totalSeriesSet > 0)) >= 4)
+                numberOf4Series = group.Where(g => g.Value.Count - totalSeriesSet > 0).Min(g => g.Value.Count - totalSeriesSet);
+            totalSeriesSet += numberOf4Series;
+
             int numberOf3Series = 0;
-            if(group.Count(g => (g.Value.Count - (numberOf5Series + numberOf4Series) > 0)) >= 3)
-                numberOf3Series = group.Where(g=> g.Value.Count - (numberOf5Series + numberOf4Series) > 0).Min(g =>  g.Value.Count - (numberOf5Series + numberOf4Series));
+            if (group.Count(g => (g.Value.Count - totalSeriesSet > 0)) >= 3)
+                numberOf3Series = group.Where(g => g.Value.Count - totalSeriesSet > 0).Min(g => g.Value.Count - totalSeriesSet);
+            totalSeriesSet += numberOf3Series;
 
             int numberOf2Series = 0;
-            if(group.Count(g => (g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series) > 0)) >= 2)
-                numberOf2Series = group.Where(g => g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series) > 0).Min(g => g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series));
+            if (group.Count(g => (g.Value.Count - (totalSeriesSet) > 0)) >= 2)
+                numberOf2Series = group.Where(g => g.Value.Count - totalSeriesSet > 0).Min(g => g.Value.Count - totalSeriesSet);
+            totalSeriesSet += numberOf2Series;
 
             int numberOf1Series = 0;
-            if(group.Count(g => (g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series + numberOf2Series) > 0)) >= 1)
-                numberOf1Series = group.Where(g => g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series + numberOf2Series) > 0).Sum(g => g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series + numberOf2Series));
+            if(group.Count(g => (g.Value.Count - totalSeriesSet > 0)) >= 1)
+                numberOf1Series = group.Where(g => g.Value.Count - totalSeriesSet > 0).Sum(g => g.Value.Count - totalSeriesSet);
 
             return (decimal) (((numberOf5Series * 5 * 0.75) + (numberOf4Series * 4 * 0.8) + (numberOf3Series * 3 * 0.9) + (numberOf2Series * 2 * 0.95) + (numberOf1Series)) * 100);
         }
