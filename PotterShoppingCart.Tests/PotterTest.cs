@@ -11,11 +11,13 @@ namespace PotterShoppingCart.Tests
         {
             var cart = new List<PotterBook>()
             {
-                Series = 1
+                new PotterBook(){
+                    Series = 1
+                } 
             };
             decimal expected = 100;
-            var target = new ShoppingCart(cart);
-            decimal actual = target.calculatePrice();
+            var target = new ShoppingCart();
+            decimal actual = target.calculatePrice(cart);
 
             Assert.AreEqual(expected, actual);
         }
