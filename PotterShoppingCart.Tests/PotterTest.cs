@@ -202,19 +202,19 @@ namespace PotterShoppingCart.Tests
 
             int numberOf4Series = 0;
             if(group.Count(g => (g.Value.Count - numberOf5Series > 0)) >= 4)
-                numberOf4Series = group.Min(g => (g.Value.Count - numberOf5Series > 0)? g.Value.Count - numberOf5Series : 0);
+                numberOf4Series = group.Where(g => g.Value.Count - (numberOf5Series) > 0).Min(g => g.Value.Count - (numberOf5Series));
            
             int numberOf3Series = 0;
             if(group.Count(g => (g.Value.Count - (numberOf5Series + numberOf4Series) > 0)) >= 3)
-                numberOf3Series = group.Min(g => (g.Value.Count - (numberOf5Series + numberOf4Series) > 0) ? g.Value.Count - (numberOf5Series + numberOf4Series) : 0);
+                numberOf3Series = group.Where(g=> g.Value.Count - (numberOf5Series + numberOf4Series) > 0).Min(g =>  g.Value.Count - (numberOf5Series + numberOf4Series));
 
             int numberOf2Series = 0;
             if(group.Count(g => (g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series) > 0)) >= 2)
-            numberOf2Series = group.Min(g => (g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series) > 0) ? g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series) : 0);
+                numberOf2Series = group.Where(g => g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series) > 0).Min(g => g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series));
 
             int numberOf1Series = 0;
             if(group.Count(g => (g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series + numberOf2Series) > 0)) >= 1)
-                numberOf1Series = group.Sum(g => (g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series + numberOf2Series) > 0) ? g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series +numberOf2Series) : 0);
+                numberOf1Series = group.Where(g => g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series + numberOf2Series) > 0).Sum(g => g.Value.Count - (numberOf5Series + numberOf4Series + numberOf3Series + numberOf2Series));
 
             return (decimal) (((numberOf5Series * 5 * 0.75) + (numberOf4Series * 4 * 0.8) + (numberOf3Series * 3 * 0.9) + (numberOf2Series * 2 * 0.95) + (numberOf1Series)) * 100);
         }
