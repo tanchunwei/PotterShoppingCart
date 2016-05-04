@@ -113,11 +113,15 @@ namespace PotterShoppingCart.Tests
     {
         public decimal CalculatePrice(List<PotterBook> cart)
         {
-            bool is5Percent = cart.GroupBy(c => c.Series).Count() >= 2;
-            bool is10Percent = cart.GroupBy(c => c.Series).Count() >= 3;
+            bool is20Percent = cart.GroupBy(c => c.Series).Count() >= 4;
+            if(is20Percent)
+                return (decimal)(cart.Count * 100 * 0.80);
 
+            bool is10Percent = cart.GroupBy(c => c.Series).Count() >= 3;
             if(is10Percent)
                 return (decimal)(cart.Count * 100 * 0.90);
+
+            bool is5Percent = cart.GroupBy(c => c.Series).Count() >= 2;
             if (is5Percent)
                 return (decimal) (cart.Count* 100 *0.95);
             return cart.Count*100;
